@@ -12,9 +12,9 @@ import java.util.List;
 public interface PassportRepository extends JpaRepository<Passport, Integer> {
     List<Passport> findPassportBySeries(String series);
 
-    @Query(value = "from passports where end_date=current_date", nativeQuery = true)
+    @Query(value = "select * from passports where end_date = current_date", nativeQuery = true)
     List<Passport> findPassportByEndDate();
 
-    @Query(value = "from passports where end_date= :for3months", nativeQuery = true)
+    @Query(value = "select * from passports where end_date >= :for3months", nativeQuery = true)
     List<Passport> findPassportsByEndDateFor3Months(@Param("for3months") Date dateFor);
 }

@@ -18,4 +18,6 @@ public interface PassportService {
     List<Passport> unavailable();
 
     List<Passport> findReplaceable();
+
+    List<Passport> checkPassportByDate();
 }

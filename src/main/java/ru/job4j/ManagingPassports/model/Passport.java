@@ -16,6 +16,15 @@ public class Passport {
     @Column
     private Date endDate;
 
+    public Passport(String series, int number, Date endDate) {
+        this.series = series;
+        this.number = number;
+        this.endDate = endDate;
+    }
+
+    public Passport() {
+    }
+
     public int getId() {
         return id;
     }
@@ -46,5 +55,15 @@ public class Passport {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Passport{" +
+                "id=" + id +
+                ", series='" + series + '\'' +
+                ", number=" + number +
+                ", endDate=" + endDate +
+                '}';
     }
 }

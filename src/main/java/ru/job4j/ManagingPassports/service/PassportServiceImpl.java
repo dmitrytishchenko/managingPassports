@@ -1,6 +1,8 @@
 package ru.job4j.ManagingPassports.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.job4j.ManagingPassports.model.Passport;
 import ru.job4j.ManagingPassports.repository.PassportRepository;
@@ -12,6 +14,8 @@ import java.util.List;
 public class PassportServiceImpl implements PassportService {
     @Autowired
     private final PassportRepository repository;
+    @Autowired
+    private KafkaTemplate<Integer, Passport> kafkaTemplate;
 
     public PassportServiceImpl(PassportRepository repository) {
         this.repository = repository;
@@ -71,5 +75,20 @@ public class PassportServiceImpl implements PassportService {
         Date current_date = new Date();
         long before3Months = current_date.getTime() - 90 * 24 * 60 * 60 * 1000;
         return new Date(before3Months);
+    }
+
+    @Override
+//    @Scheduled(cron = "0 0 10 * * *") - every day
+    @Scheduled(cron = "*/20 * * * * *" )
+    public List<Passport> checkPassportByDate() {
+        if (findReplaceable().size() != 0) {
+            System.out.println("There are some passports for replacement: ");
+            for (Passport p : findReplaceable()) {
+                kafkaTemplate.send("passport", p);
+            }
+        } else {
+            System.out.println("There are no passports for replacement");
+        }
+        return findReplaceable();
     }
 }

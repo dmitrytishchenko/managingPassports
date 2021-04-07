@@ -67,6 +67,11 @@ public class PassportApiService implements PassportService {
         return getAll(String.format("%s/replaceable", url));
     }
 
+    @Override
+    public List<Passport> checkPassportByDate() {
+        return null;
+    }
+
     private List<Passport> getAll(String url) {
         List<Passport> list = client.exchange(
                 url,
